@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตะกร้าสินค้า | PP Restaurant</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        body {
+            background: #f8f8f8;
+            color: #333;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-container {
+            max-width: 900px;
+            flex: 1;
+        }
+
+        /* หัวข้อหน้า */
+        .cart-header-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #222;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* การ์ดรายการสินค้า */
+        .cart-item-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .cart-item-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /* รูปภาพอาหาร */
+        .cart-img-wrapper {
+            width: 90px;
+            height: 90px;
+            border-radius: 12px;
+            background: #f5f5f5;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .cart-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ข้อมูลอาหาร */
+        .cart-item-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 4px;
+        }
+
+        .cart-item-desc {
+            font-size: 13px;
+            color: #888;
+            margin: 0;
+            display: -webkit-box;
+            /* -webkit-line-clamp: 1; */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .cart-item-price {
+            font-size: 18px;
+            font-weight: 800;
+            color: #222;
+        }
+
+        /* ตัวเพิ่ม-ลดจำนวน (สไตล์ธีมสีแดงสดใส) */
+        .qty-badge-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f8f8;
+            padding: 4px 8px;
+            border-radius: 50px;
+            border: 1px solid #eaeaea;
+        }
+
+        .btn-cart-qty {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: #dc3545;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            line-height: 1;
+        }
+
+        .btn-cart-qty:hover {
+            background: #bb2d3b;
+            transform: scale(1.08);
+        }
+
+        .btn-cart-qty:active {
+            transform: scale(0.95);
+        }
+
+        .cart-qty-num {
+            font-size: 16px;
+            font-weight: 700;
+            color: #222;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        /* ปุ่มลบสินค้า */
+        .btn-remove-item {
+            color: #aaa;
+            background: transparent;
+            border: none;
+            font-size: 18px;
+            transition: color 0.2s;
+            padding: 4px;
+        }
+
+        .btn-remove-item:hover {
+            color: #dc3545;
+        }
+
+        /* การ์ดสรุปยอดเงิน */
+        .summary-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+            border: 1px solid #f0f0f0;
+            margin-top: 24px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .summary-total {
+            font-size: 22px;
+            font-weight: 800;
+            color: #000;
+            border-top: 2px dashed #eee;
+            padding-top: 16px;
+            margin-top: 16px;
+            margin-bottom: 24px;
+        }
+
+        .summary-total .total-price {
+            color: #dc3545;
+            font-size: 26px;
+        }
+
+        /* ปุ่มสั่งอาหาร */
+        .btn-checkout {
+            width: 100%;
+            height: 54px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 14px rgba(220, 53, 69, 0.35);
+            transition: all 0.2s ease;
+        }
+
+        .btn-checkout:hover {
+            background: #bb2d3b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(220, 53, 69, 0.45);
+        }
+
+        /* Empty State */
+        .empty-cart-box {
+            background: white;
+            border-radius: 16px;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        }
+
+        @media (max-width: 576px) {
+            .cart-img-wrapper {
+                width: 70px;
+                height: 70px;
+            }
+
+            .cart-item-title {
+                font-size: 16px;
+            }
+
+            .cart-item-price {
+                font-size: 16px;
+            }
+
+            .btn-cart-qty {
+                width: 28px;
+                height: 28px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('header') %>
+
+    <main class="container main-container py-4 my-2">
+
+        <!-- Title -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="cart-header-title">
+                <i class="bi bi-cart3 text-danger"></i> ตะกร้าสินค้า
+            </h1>
+            <a href="/menu" class="btn btn-outline-secondary rounded-pill btn-sm px-3 fw-bold">
+                <i class="bi bi-plus-lg"></i> เพิ่มอาหาร
+            </a>
+        </div>
+
+        <!-- รายการสินค้าในตะกร้า -->
+        <div id="cartListContainer">
+            <% if (cartItems && cartItems.length > 0) { %>
+                
+                <% cartItems.forEach(function(item) { %>
+                    <div class="cart-item-card d-flex align-items-center justify-content-between gap-3" id="cart-item-<%= item.menu_item_id %>">
+                        
+                        <!-- รูปและรายละเอียดสินค้า -->
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="cart-img-wrapper">
+                                <img src="/menu_items/<%= item.menu_item_id %>.jpg" 
+                                     class="cart-img" 
+                                     alt="<%= item.item_name %>"
+                                     onerror="this.src='https://via.placeholder.com/100?text=Food'">
+                            </div>
+                            <div>
+                                <h3 class="cart-item-title"><%= item.item_name %></h3>
+                                <p class="cart-item-desc"><%= item.item_description || 'ไม่มีคำอธิบายเพิ่มเติม' %></p>
+                                <div class="cart-item-price mt-1 d-md-none">
+                                    <%= Number(item.price).toLocaleString('th-TH') %> .-
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ราคาและปุ่มเพิ่ม-ลด -->
+                        <div class="d-flex align-items-center gap-3 gap-md-4">
+                            <!-- ราคา (แสดงบน desktop) -->
+                            <div class="cart-item-price d-none d-md-block text-end">
+                                <%= Number(item.price).toLocaleString('th-TH') %> .-
+                            </div>
+
+                            <!-- ปุ่มบวกลบ -->
+                            <div class="qty-badge-group">
+                                <button type="button" class="btn-cart-qty" onclick="updateCartQuantity('<%= item.menu_item_id %>', -1)">−</button>
+                                <span class="cart-qty-num" id="qty-val-<%= item.menu_item_id %>"><%= item.quantity %></span>
+                                <button type="button" class="btn-cart-qty" onclick="updateCartQuantity('<%= item.menu_item_id %>', 1)">+</button>
+                            </div>
+
+                            <!-- ปุ่มลบออกจากตะกร้า -->
+                            <button type="button" class="btn-remove-item" title="ลบรายการนี้" onclick="removeCartItem('<%= item.menu_item_id %>')">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                <% }); %>
+
+                <!-- สรุปยอดเงินและปุ่มสั่งอาหาร -->
+                <div class="summary-card">
+                    <div class="summary-row">
+                        <span>จำนวนรายการทั้งหมด</span>
+                        <span class="fw-bold text-dark" id="totalItemsCount"><%= totalItems %> รายการ</span>
+                    </div>
+
+                    <div class="summary-row summary-total">
+                        <span>ราคารวมทั้งหมด</span>
+                        <span class="total-price" id="totalPriceDisplay"><%= Number(totalPrice).toLocaleString('th-TH') %> .-</span>
+                    </div>
+
+                    <form action="/checkout" method="POST">
+                        <button type="submit" class="btn-checkout">
+                            <i class="bi bi-bag-check-fill"></i> สั่งอาหาร
+                        </button>
+                    </form>
+                </div>
+
+            <% } else { %>
+                <!-- สภาวะตะกร้าว่างเปล่า -->
+                <div class="empty-cart-box">
+                    <i class="bi bi-cart-x text-muted" style="font-size: 64px;"></i>
+                    <h3 class="fw-bold mt-3 text-secondary">ยังไม่มีสินค้าในตะกร้า</h3>
+                    <p class="text-muted mb-4">เลือกดูเมนูอาหารอร่อยๆ แล้วเพิ่มลงตะกร้าได้เลย!</p>
+                    <a href="/menu" class="btn btn-danger btn-lg rounded-pill px-4 fw-bold">
+                        <i class="bi bi-journal-text me-2"></i> ดูเมนูอาหาร
+                    </a>
+                </div>
+            <% } %>
+        </div>
+
+    </main>
+
+    <%- include('footer') %>
+
+    <!-- JavaScript อัปเดตจำนวนสินค้าสดๆ (AJAX/LocalStorage) -->
+    <script>
+        function updateCartQuantity(itemId, change) {
+            // ส่ง Request ไปยัง backend หรือจัดการ Client-side LocalStorage
+            fetch('/cart/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ itemId: itemId, change: change })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); // โหลดข้อมูลใหม่เพื่ออัปเดตราคา
+                }
+            })
+            .catch(err => console.error(err));
+        }
+
+        function removeCartItem(itemId) {
+            if (confirm('คุณต้องการลบรายการนี้ออกจากตะกร้าใช่หรือไม่?')) {
+                fetch('/cart/remove', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ itemId: itemId })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

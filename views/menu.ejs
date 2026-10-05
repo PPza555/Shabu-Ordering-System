@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เมนูอาหาร</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <style>
+
+        body {
+            background: linear-gradient(to bottom right, #f0f0f0, #fbe9e7);
+        }
+
+        .card.h-100.menu-item-card {
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+            cursor: pointer;
+        }
+
+        .card.h-100.menu-item-card {
+            border-radius: 12px;
+            border: none;
+            background-color: #f8f9fa;
+            color: #424242;
+        }
+
+        .list-group-item.active {
+            /* background-color: rgb(128, 0, 0); */
+            background-color: rgb(191, 49, 49);
+            border-radius: 12px;
+            border: none;
+            padding: 8px;
+            text-align: center;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .list-group-item.active:hover {
+            background-color: rgb(125, 10, 10);
+        }
+
+        .col-md-3.mb-3 {
+            margin-left: -1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        img {
+            transition: 0.3s ease-in-out;
+        }
+
+        img:hover {
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+
+<body>
+    <%- include('header') %>
+
+        <div class="container mt-4">
+            <div class="row">
+                <!-- Table of Contents (left) -->
+                <div class="col-md-3 mb-3">
+                    <div class="position-sticky" style="top: 80px;">
+                        <div class="list-group">
+                            <% data.forEach(function(item) { %>
+                                <a href="#section<%= item.category_id %>"
+                                    class="list-group-item list-group-item-action active">
+                                    <%= item.category_name %>
+                                </a>
+                                <% }); %>
+                        </div>
+                    </div>
+                </div>
+                <!-- Content (right) -->
+                <div class="col-md-9 border-start ps-4">
+                    <% data.forEach(function(category) { %>
+                        <div id="section<%= category.category_id %>" class="mb-5" style="scroll-margin-top: 80px;">
+                            <h1 class="mb-4">
+                                <%= category.category_name %>
+                            </h1>
+                            <hr>
+                            <div class="row">
+                                <% data2 .filter(item=> item.category_id === category.category_id)
+                                    .forEach(function(item) { %>
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card h-100 menu-item-card" data-menu-id="<%= item.menu_item_id %>"
+                                            data-name="<%= item.item_name %>"
+                                            data-img="/menu_items/<%= item.menu_item_id %>.jpg"
+                                            data-desc="<%= item.item_description %>" data-price="<%= item.price %>">
+                                            <img src="/menu_items/<%= item.menu_item_id %>.jpg"
+                                                class="card-img-top object-fit-contain"
+                                                style="height: 200px; object-fit: contain;" alt="<%= item.menu_name %>">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <%= item.item_name %>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                            </div>
+                        </div>
+                        <% }); %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for menu item details -->
+        <div class="modal fade" id="menuItemModal" tabindex="-1" aria-labelledby="menuItemModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="menuItemModalLabel"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img id="menuItemModalImg" src="" class="img-fluid mb-3 d-block mx-auto"
+                            style="height:220px; width:220px; object-fit:contain;" alt="">
+                        <p class="fw-bold" id="menuItemModalPrice"></p>
+                        <div class="mb-3 text-center">
+                            <label class="form-label">ขนาด</label>
+                            <select id="menuItemModalSize" class="form-select" style="width:140px; margin:0 auto;">
+                                <option value="S">S (เล็ก)</option>
+                                <option value="M">M (กลาง)</option>
+                                <option value="L">L (ใหญ่)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 text-center">
+                            <label class="form-label">จำนวน</label>
+                            <div class="d-flex justify-content-center">
+                                <div class="input-group" style="width: 140px;">
+                                    <button class="btn btn-outline-secondary" type="button" id="qtyDecrease">-</button>
+                                    <input type="number" id="menuItemModalQty" class="form-control text-center"
+                                        value="1" min="1" readonly>
+                                    <button class="btn btn-outline-secondary" type="button" id="qtyIncrease">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-danger w-100" id="menuItemModalConfirm">ยืนยัน</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%- include('cart.ejs') %>
+        <%- include('footer') %>
+
+        <script src="/javascripts/menu_js.js"></script>
+</body>
+
+</html>

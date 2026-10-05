@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome | ระบบสั่งอาหาร</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- เพิ่มบรรทัดนี้เพื่อรองรับมือถือ -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        body {
+            background: linear-gradient(180deg, #f0f0f0 25%, #fbe9e7 100%);
+            min-height: 100vh;
+        }
+
+        .fw-bold.mb-3 {
+            font-size: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        .home-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px #0001;
+            padding: 2.5rem 1rem;
+            max-width: 400px;
+            width: 100%;
+            margin: 40px auto;
+
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+
+        .table-select {
+            margin-top: 2rem;
+        }
+
+        .category-list {
+            margin: 2rem auto 0 auto;
+        }
+
+        .category-link {
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0.75rem 0;
+        }
+
+        .card-img-top {
+            height: 140px;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('header') %>
+
+    <!-- Food Categories -->
+    <div class="category-list text-center container" style="max-width: 900px;">
+        <h4 class="fw-bold mb-3">หมวดหมู่อาหาร</h4>
+        <div class="row justify-content-center">
+            <% if (typeof data !=='undefined' && data.length> 0) { %>
+                <% data.forEach(function(category) { %>
+                    <div class="col-12 col-sm-10 col-md-6 col-lg-4 mb-3">
+                        <div class="card h-100 shadow-sm">
+                            <img src="/categories/<%= category.category_id %>.jpg" class="card-img-top"
+                                alt="<%= category.category_name %>">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <h5 class="card-title mb-3">
+                                    <%= category.category_name %>
+                                </h5>
+                                <a href="/menu?table_id=<%= table_id %>#section<%= category.category_id %>"
+                                    class="btn btn-danger w-100 category-link">
+                                    ดูเมนูในหมวดนี้
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="col-12 text-muted">ไม่มีหมวดหมู่อาหาร</div>
+            <% } %>
+        </div>
+    </div>
+
+    <%- include('cart') %>
+    <%- include('footer') %>
+</body>
+
+</html>

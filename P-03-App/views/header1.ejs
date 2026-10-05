@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        #google_translate_element .goog-te-gadget {
+            font-size: 0;
+            padding: 0;
+            margin: 0;
+        }
+
+        #google_translate_element .goog-te-gadget .goog-te-combo {
+            font-size: 1rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background: #f8f9fa;
+        }
+
+        #google_translate_element img {
+            display: none !important;
+        }
+
+        body {
+            top: 0 !important;
+            position: static !important;
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+            font-family: 'Kodchasan', sans-serif;
+        }
+
+        @font-face {
+            font-family: 'Kodchasan';
+            src: url('/fonts/Kodchasan-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        html {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        body {
+            top: 0px !important;
+        }
+
+        body>.skiptranslate>iframe.skiptranslate {
+            display: none !important;
+            visibility: hidden !important;
+        }
+
+        .bg-custom {
+            background-color: #b71c1c;
+        }
+
+        .navbar-nav.flex-row.ms-3, .nav-link {
+            font-weight: bold;
+            font-size: 17px;
+            color: white;
+        }
+
+    </style>
+</head>
+
+<body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-custom p-3">
+        <div class="d-flex w-100 align-items-center">
+            <div class="d-flex ms-5">
+                <ul class="navbar-nav flex-row ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="/<%= typeof table_id !== 'undefined' && table_id ? '?table_id=' + table_id : '' %>">หน้าหลัก</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav flex-row ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="/menu<%= typeof table_id !== 'undefined' && table_id ? '?table_id=' + table_id : '' %>">เมนูทั้งหมด</a>
+                    </li>
+                </ul>
+            </div>
+            <ul class="navbar-nav flex-row ms-auto align-items-center mb-0">
+                <li class="nav-item me-2">
+                    <div id="google_translate_element"></div>
+                </li>
+                <li class="nav-item me-2">
+                    <a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+                        <i class="bi bi-cart"></i> ตะกร้า
+                    </a>
+                </li>
+                <li class="nav-item me-2">
+                    <a class="nav-link"
+                        href="/history<%= typeof table_id !== 'undefined' && table_id ? '?table_id=' + table_id : '' %>">
+                        <i class="bi bi-cart"></i> ประวัติการสั่งอาหาร
+                    </a>
+                </li>
+                <li class="nav-item me-5">
+                    <a class="nav-link"
+                        href="/payment<%= typeof table_id !== 'undefined' && table_id ? '?table_id=' + table_id : '' %>">
+                        <i class="bi bi-cart"></i> ชำระเงิน
+                    </a>
+                </li>
+                <li class="nav-item d-lg-none">
+                    <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <script src="/javascripts/header_js.js"></script>
+</body>
+</html>

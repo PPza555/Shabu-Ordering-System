@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เมนูอาหาร | PP Restaurant</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        body {
+            background: #f8f8f8;
+            color: #333;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .menu-container {
+            max-width: 1400px;
+        }
+
+        /* Sidebar หมวดหมู่ */
+        .category-sidebar {
+            position: sticky;
+            top: 90px;
+        }
+
+        .category-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .category-link {
+            display: block;
+            padding: 12px 16px;
+            background: white;
+            color: #444;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .category-link:hover {
+            background: #dc3545;
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .category-section {
+            scroll-margin-top: 90px;
+        }
+
+        .category-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .category-heading h2 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .category-heading-line {
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+        }
+
+        /* Food Card Design */
+        .menu-card {
+            height: 100%;
+            overflow: hidden;
+            background: white;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .menu-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 210px;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+
+        .menu-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-card:hover .menu-image {
+            transform: scale(1.05);
+        }
+
+        .menu-card-body {
+            padding: 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .menu-name {
+            margin: 0 0 6px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .menu-desc {
+            margin: 0 0 10px;
+            font-size: 13px;
+            color: #777;
+            display: -webkit-box;
+            /* -webkit-line-clamp: 2; */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .menu-price {
+            margin: 0;
+            color: #dc3545;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        /* แถบสีแดงบวกลบด้านล่างของการ์ด */
+        .menu-card-action {
+            background: #dc3545;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 24px;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+
+        .btn-qty {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            color: #dc3545;
+            font-weight: 700;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.15s ease, background 0.15s ease;
+            line-height: 1;
+            padding: 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-qty:hover {
+            background: #f8f8f8;
+            transform: scale(1.1);
+        }
+
+        .btn-qty:active {
+            transform: scale(0.95);
+        }
+
+        .qty-count {
+            color: white;
+            font-weight: 700;
+            font-size: 17px;
+            user-select: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .category-sidebar {
+                position: static;
+                margin-bottom: 25px;
+            }
+
+            .category-list {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 5px;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            .category-list::-webkit-scrollbar {
+                display: none;
+            }
+
+            .category-link {
+                flex: 0 0 auto;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .menu-image-wrapper {
+                height: 160px;
+            }
+
+            .category-heading h2 {
+                font-size: 30px;
+            }
+
+            .menu-name {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('header') %>
+
+    <main class="container menu-container py-4">
+        <div class="row g-4">
+
+            <!-- Category Sidebar -->
+            <aside class="col-lg-3">
+                <div class="category-sidebar">
+                    <h3 class="category-title">
+                        <i class="bi bi-list-ul me-2"></i>
+                        หมวดหมู่อาหาร
+                    </h3>
+
+                    <div class="category-list">
+                        <% data.forEach(function(category, index) { %>
+                            <a href="#section<%= category.category_id %>" class="category-link <%= index === 0 ? 'active' : '' %>">
+                                <%= category.category_name %>
+                            </a>
+                        <% }); %>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Menu Content -->
+            <section class="col-lg-9">
+                <% data.forEach(function(category) { %>
+                    <section id="section<%= category.category_id %>" class="category-section mb-5">
+
+                        <!-- Category Heading -->
+                        <div class="category-heading">
+                            <h2><%= category.category_name %></h2>
+                            <div class="category-heading-line"></div>
+                        </div>
+
+                        <!-- Food Cards Grid -->
+                        <div class="row g-4">
+                            <% data2
+                                .filter(function(item) {
+                                    return item.category_id === category.category_id;
+                                })
+                                .forEach(function(item) { %>
+
+                                <div class="col-6 col-md-6 col-xl-4">
+                                    <div class="menu-card" onclick="goToDetail('<%= item.menu_item_id %>')">
+                                        
+                                        <%# Image %>
+                                        <div class="menu-image-wrapper">
+                                            <img src="/menu_items/<%= item.menu_item_id %>.jpg" 
+                                                 class="menu-image" 
+                                                 alt="<%= item.item_name %>" 
+                                                 onerror="this.src='https://via.placeholder.com/300x200?text=Food+Image'"
+                                                 loading="lazy">
+                                        </div>
+
+                                        <%# Info %>
+                                        <div class="menu-card-body">
+                                            <div>
+                                                <h3 class="menu-name"><%= item.item_name %></h3>
+                                                <p class="menu-desc"><%= item.item_description || 'รายละเอียดอาหารเพิ่มเติม...' %></p>
+                                            </div>
+                                            <p class="menu-price">
+                                                <%= Number(item.price).toLocaleString('th-TH') %> บาท
+                                            </p>
+                                        </div>
+
+                                        <%# Red Action Bar (+ / -) %>
+                                        <div class="menu-card-action" onclick="event.stopPropagation();">
+                                            <button type="button" class="btn-qty" onclick="changeQty('<%= item.menu_item_id %>', -1)">−</button>
+                                            <span class="qty-count" id="qty-<%= item.menu_item_id %>">0</span>
+                                            <button type="button" class="btn-qty" onclick="changeQty('<%= item.menu_item_id %>', 1)">+</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            <% }); %>
+                        </div>
+
+                    </section>
+                <% }); %>
+            </section>
+
+        </div>
+    </main>
+
+    <%#- include('cart.ejs') %>
+    <%- include('footer') %>
+
+    <script src="/javascripts/menu_js.js"></script>
+    <script>
+        function goToDetail(itemId) {
+            window.location.href = `/menu/item${itemId}`;
+        }
+    </script>
+</body>
+
+</html>

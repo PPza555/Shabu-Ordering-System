@@ -1,0 +1,32 @@
+<div id="cartOffcanvas" class="offcanvas offcanvas-end" tabindex="-1">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">ตะกร้าสินค้า</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div id="cartItems"></div>
+    </div>
+    <div class="offcanvas-footer p-3">
+        <div id="cartTotalPrice" class="fw-bold fs-5 text-end text-center mb-2"></div>
+        <button class="btn btn-danger w-100" id="checkoutBtn">สั่งอาหาร</button>
+    </div>
+</div>
+<!-- Modal แจ้งเตือนยังไม่ได้เพิ่มอาหารเข้าตะกร้า -->
+<div class="modal fade" id="cartEmptyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title fw-bold text-white">⚠️ แจ้งเตือน</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body fs-5">
+                ยังไม่ได้เพิ่มรายการอาหารลงตะกร้า
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="goMenuBtn">ไปที่หน้าเมนู</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/javascripts/cart_js.js"></script>

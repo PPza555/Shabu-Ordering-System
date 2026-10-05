@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ชำระเงิน</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <style>
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+            min-height: 100vh;
+            justify-content: center;
+        }
+
+        .modal-header {
+            background-color: #b71c1c;
+        }
+
+    </style>
+</head>
+
+<body>
+        <%- include('header.ejs') %>
+        <script>
+            window.noItems = "<%= noItems ? 'true' : 'false' %>";
+        </script>
+        <div class="container mt-4">
+            <h2 class="mb-4">ชำระเงิน</h2>
+            <form id="paymentForm">
+                <div class="mb-3">
+                    <label for="table_id" class="form-label">โต๊ะ</label>
+                    <input type="text" class="form-control" id="table_id" name="table_id" value="<%= table_id %>"
+                        readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">เมนูที่สั่งทั้งหมดสำหรับโต๊ะนี้</label>
+                    <ul class="list-group mb-3">
+                        <% let total=0; %>
+                        <% if (allOrderedItems.length===0) { %>
+                            <li class="list-group-item text-center text-muted">ไม่มีรายการ</li>
+                        <% } else { %>
+                            <% allOrderedItems.forEach(function(item) { 
+                                let basePrice = item.price || 0;
+                                let displayPrice = basePrice;
+                                if (item.size === 'L') displayPrice = basePrice * 1.2;
+                                else if (item.size === 'S') displayPrice = basePrice * 0.8;
+                                // Default (M or undefined) is basePrice
+
+                                const itemTotal = displayPrice * item.total_qty;
+                                total += itemTotal;
+                            %>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <%= item.item_name %>
+                                        <span class="badge bg-info ms-2"><%= item.size %></span>
+                                        <span class="badge bg-secondary ms-2">x<%= item.total_qty %></span>
+                                    </span>
+                                    <span>
+                                        <%= Number(displayPrice).toLocaleString('en-US', {minimumFractionDigits: 2}) %> บาท
+                                        <span class="ms-2 text-muted">รวม: <%= itemTotal.toLocaleString('en-US', {minimumFractionDigits: 2}) %> บาท</span>
+                                    </span>
+                                </li>
+                            <% }); %>
+                        <% } %>
+                    </ul>
+                </div>
+                <div class="mb-3 text-end">
+                    <span class="fw-bold fs-5">รวมทั้งหมด: <span id="totalPrice">
+                            <%= total.toLocaleString('en-US', {minimumFractionDigits: 2}) %>
+                        </span> บาท</span>
+                    <br>
+                    <% const vat=Math.round(total * 0.07 * 100) / 100; const finalPrice=total + vat; %>
+                    <span class="fw-bold">VAT 7%: <%= vat.toLocaleString('en-US', {minimumFractionDigits: 2}) %>
+                                บาท</span>
+                    <br>
+                    <span class="fw-bold fs-4 text-success">ยอดสุทธิ: <%= finalPrice.toLocaleString('en-US',
+                                {minimumFractionDigits: 2}) %> บาท</span>
+                </div>
+                <button type="submit" class="btn btn-success w-100 fw-bold">ยืนยันการชำระเงิน</button>
+            </form>
+            <div id="paymentMsg" class="mt-3"></div>
+
+            <hr class="my-4">
+        </div>
+
+        <%- include('cart') %>
+
+            <%- include('footer') %>
+
+                <!-- Add this modal before </body> -->
+                <div class="modal fade" id="paymentMethodModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-white">เลือกวิธีชำระเงิน</h5>
+                                <button type="button" class="btn-close btn-close-white"
+                                    data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <button type="button" class="btn btn-success w-100 mb-3 fw-bold" id="payWithQRBtn">QR Code
+                                    PromptPay</button>
+                                <button type="button" class="btn btn-secondary w-100 fw-bold"
+                                    id="payAtCashierBtn">ชำระที่แคชเชียร์</button>
+                                <div id="qrArea" class="mt-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="qrPaymentModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-white">ชำระเงินด้วย QR Code</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <div id="qrArea2" class="mb-3"></div>
+                                <!-- Add Skip Payment button -->
+                                <button type="button" class="btn btn-danger w-100 fw-bold" id="skipPaymentBtn">ข้ามการชำระเงิน</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script src="/javascripts/qrcode.js"></script>
+                <script src="/socket.io/socket.io.js"></script>
+                <script src="/javascripts/payment_js.js"></script>
+</body>
+
+</html>

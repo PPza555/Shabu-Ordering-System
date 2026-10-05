@@ -1,0 +1,57 @@
+<% const tableQuery = table_id ? '?table_id=' + table_id : ''; %>
+<footer class="footer bg-dark text-white py-5">
+    <div class="container">
+        <div class="row">
+            <!-- About Section -->
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h5 class="fw-bold mb-3">เกี่ยวกับเรา</h5>
+                <p class="text-secondary small">
+                    เราคือทีมที่มุ่งมั่นที่จะนำเสนอโซลูชันการสั่งอาหารที่สะดวกและทันสมัยที่สุด
+                    ให้ประสบการณ์การใช้งานที่ดีที่สุดแก่คุณ
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h5 class="fw-bold mb-3">ลิงค์ด่วน</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a href="/<%= tableQuery %>" class="text-secondary text-decoration-none">เมนู</a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="/history<%= tableQuery %>" class="text-secondary text-decoration-none">ประวัติการสั่งอาหาร</a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="/payment<%= tableQuery %>" class="text-secondary text-decoration-none">ชำระเงิน</a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Contact & Social Media -->
+            <div class="col-md-4">
+                <h5 class="fw-bold mb-3">ติดตามเรา</h5>
+                <div class="d-flex gap-3 h4">
+                    <a href="#" class="text-white text-decoration-none"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white text-decoration-none"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white text-decoration-none"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white text-decoration-none"><i class="fab fa-line"></i></a>
+                </div>
+                <!-- Combined the emails into a single block with line breaks -->
+                <p class="text-secondary small mt-3">
+                    Email: 67070098@kmitl.ac.th<br>
+                    Email: 67070168@kmitl.ac.th<br>
+                    Email: 67070178@kmitl.ac.th<br>
+                    Email: 67070195@kmitl.ac.th<br>
+                    Email: 67070307@kmitl.ac.th
+                </p>
+            </div>
+        </div>
+
+        <!-- Copyright Notice -->
+        <div class="row mt-4 pt-3 border-top border-secondary">
+            <div class="col text-center text-secondary">
+                <p class="mb-0 small">&copy; 2025 กลุ่มที่ 3 สงวนลิขสิทธิ์ทั้งหมด</p>
+            </div>
+        </div>
+    </div>
+</footer>

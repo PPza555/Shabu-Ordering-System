@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #f0f0f0, #fbe9e7);
+        }
+        
+    </style>
+</head>
+<body>
+    <%- include('staffHeader.ejs') %>
+
+    <div class="container mt-4">
+        <h2>ออเดอร์ทั้งหมด</h2>
+        <div class="accordion" id="ordersAccordion">
+            <% 
+                let hasOrders = false;
+                orders.forEach(function(order) { 
+                    const items = orderItems[order.order_id] || [];
+                    if (items.length === 0) return;
+                    hasOrders = true;
+                });
+            %>
+            <% if (!hasOrders) { %>
+                <div class="text-center text-muted py-5">ไม่มีรายการ</div>
+            <% } else { %>
+                <% orders.forEach(function(order, idx) { 
+                    const items = orderItems[order.order_id] || [];
+                    if (items.length === 0) return;
+                %>
+                    <div class="accordion-item mb-2">
+                        <h2 class="accordion-header" id="heading<%= order.order_id %>">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= order.order_id %>" aria-expanded="false" aria-controls="collapse<%= order.order_id %>">
+                                ออเดอร์ #<%= order.order_id %> | โต๊ะ: <%= typeof order.table_number !== 'undefined' ? order.table_number : order.table_id %> | เวลา: <%= order.start_time || order.created_at %>
+                            </button>
+                        </h2>
+                        <div id="collapse<%= order.order_id %>" class="accordion-collapse collapse" aria-labelledby="heading<%= order.order_id %>" data-bs-parent="#ordersAccordion">
+                            <div class="accordion-body">
+                                <ul class="list-group mb-3">
+                                    <% items.forEach(function(item) { %>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span>
+                                                <%= item.item_name %>
+                                                <span class="badge bg-info ms-2"><%= item.size %></span>
+                                                <span class="badge bg-secondary ms-2">x<%= item.quantity %></span>
+                                            </span>
+                                            <span>สถานะ: <%= item.status_name %></span>
+                                        </li>
+                                    <% }); %>
+                                </ul>
+                                <button class="btn btn-warning change-status-btn" data-order-id="<%= order.order_id %>">เปลี่ยนสถานะ</button>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
+    </div>
+
+    <script src="/javascripts/orders_js.js"></script>
+</body>
+</html>

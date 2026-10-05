@@ -1,0 +1,201 @@
+<% // เก็บ table_id เพื่อส่งต่อไปยังทุกหน้า
+    const tableQuery=typeof table_id !=='undefined' && table_id ?
+    `?table_id=${encodeURIComponent(table_id)}` : '' ; %>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger sticky-top shadow-sm">
+        <div class="container">
+
+            <!-- Logo + ชื่อร้าน -->
+            <a class="navbar-brand d-flex align-items-center gap-2" href="/<%= tableQuery %>">
+
+                <div class="restaurant-logo">
+                    PP
+                </div>
+
+                <div class="lh-sm">
+                    <div class="fw-bold fs-5">PP Restaurant</div>
+                    <!-- <small class="text-white-50">Food Ordering</small> -->
+                </div>
+            </a>
+
+
+            <!-- ปุ่ม Menu สำหรับมือถือ -->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar" aria-expanded="false" aria-label="เปิดเมนู">
+
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+
+            <!-- เมนู -->
+            <div class="collapse navbar-collapse" id="mainNavbar">
+
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2 mt-3 mt-lg-0">
+
+                    <!-- หน้าหลัก -->
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="/<%= tableQuery %>">
+                            <i class="bi bi-house-door-fill me-1"></i>
+                            หน้าหลัก
+                        </a>
+                    </li>
+
+
+                    <!-- ค้นหา -->
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="/find<%= tableQuery %>">
+                            <i class="bi bi-search me-1"></i>
+                            ค้นหา
+                        </a>
+                    </li>
+
+
+                    <!-- ประวัติ -->
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="/history<%= tableQuery %>">
+                            <i class="bi bi-clock-history me-1"></i>
+                            ประวัติการสั่ง
+                        </a>
+                    </li>
+
+
+                    <!-- ตะกร้า -->
+                    <li class="nav-item ms-lg-2">
+                        <a href="/cart<%= tableQuery %>" class="cart-btn">
+
+                            <i class="bi bi-cart3"></i>
+
+                            <span class="cart-text">
+                                ตะกร้า
+                            </span>
+
+                            <span id="cartCount" class="cart-count">
+                                0
+                            </span>
+
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+
+    <!-- CSS ของ Navbar -->
+    <style>
+        .restaurant-logo {
+            width: 48px;
+            height: 48px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background-color: #fff;
+            color: #dc3545;
+
+            font-size: 18px;
+            font-weight: 800;
+
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .navbar .nav-link {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            transition: 0.2s;
+        }
+
+        .navbar .nav-link:hover {
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .navbar .btn {
+            transition: 0.2s;
+        }
+
+        .navbar .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 991px) {
+            .navbar-nav {
+                padding-bottom: 10px;
+            }
+
+            .navbar .nav-link {
+                padding: 12px 10px;
+            }
+        }
+
+        .cart-btn {
+            position: relative;
+
+            display: inline-flex;
+            align-items: center;
+
+            padding: 10px 16px;
+
+            background-color: white;
+            color: #dc3545;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+            font-weight: 700;
+
+            transition: 0.2s;
+        }
+
+        .cart-btn:hover {
+            color: #dc3545;
+            transform: translateY(-2px);
+        }
+
+        .cart-btn i {
+            font-size: 20px;
+        }
+
+        .cart-text {
+            margin-left: 6px;
+        }
+
+        .cart-count {
+            position: absolute;
+
+            top: -7px;
+            right: -7px;
+
+            min-width: 22px;
+            height: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0 5px;
+
+            background-color: #dc3545;
+            color: white;
+
+            border-radius: 50%;
+
+            border: 2px solid white;
+
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+    <!-- JavaScript ของ Header -->
+    <script src="/javascripts/header_js.js"></script>

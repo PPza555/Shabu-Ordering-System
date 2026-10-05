@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #f0f0f0, #fbe9e7);
+        }
+
+        .table-block {
+            width: 100px;
+            height: 100px;
+            background: #f8f9fa;
+            border: 2px solid #007bff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #007bff;
+            margin: 12px;
+            transition: box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .table-block:hover {
+            box-shadow: 0 0 0 4px #007bff33;
+            background: #e9ecef;
+        }
+        .tables-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <%- include('staffHeader.ejs') %>
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-md-6">
+          <h4 class="mt-5 mb-3">รายการรอชำระที่แคชเชียร์</h4>
+          <ul class="list-group">
+            <% payments.filter(p => p.method === 'cashier' && p.paid === 0).forEach(function(payment) { %>
+              <li class="list-group-item d-flex justify-content-between align-items-center payment-row"
+                  data-table="<%= payment.table_number %>"
+                  data-amount="<%= payment.amount %>"
+                  data-paidat="<%= payment.paid_at %>">
+                <span>โต๊ะ <strong><%= payment.table_number %></strong></span>
+                <span>ยอดสุทธิ <strong><%= Number(payment.amount).toLocaleString('en-US', {minimumFractionDigits: 2}) %></strong> บาท</span>
+                <span class="text-muted small">เวลา: <%= payment.paid_at %></span>
+              </li>
+            <% }); %>
+            <% if (!payments.some(p => p.method === 'cashier' && p.paid === 0)) { %>
+              <li class="list-group-item text-center text-muted">ไม่มีรายการรอชำระที่แคชเชียร์</li>
+            <% } %>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <h4 class="mt-5 mb-3">รายการชำระผ่าน QR Code</h4>
+          <ul class="list-group" id="qrList">
+            <% payments.filter(p => p.method === 'QR' && p.paid === 0).forEach(function(payment) { %>
+              <li class="list-group-item d-flex justify-content-between align-items-center payment-row"
+                  data-table="<%= payment.table_number %>"
+                  data-amount="<%= payment.amount %>"
+                  data-paidat="<%= payment.paid_at %>">
+                <span>โต๊ะ <strong><%= payment.table_number %></strong></span>
+                <span>ยอดสุทธิ <strong><%= Number(payment.amount).toLocaleString('en-US', {minimumFractionDigits: 2}) %></strong> บาท</span>
+                <span class="text-muted small">เวลา: <%= payment.paid_at %></span>
+              </li>
+            <% }); %>
+            <% if (!payments.some(p => p.method === 'QR' && p.paid === 0)) { %>
+              <li class="list-group-item text-center text-muted">ไม่มีรายการรอชำระผ่าน QR Code</li>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="paymentSummaryModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">สรุปยอดชำระเงิน</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="paymentSummaryBody">
+            <!-- JS will fill this -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" id="finishTransactionBtn">เสร็จสิ้นรายการ</button>
+            <button type="button" class="btn btn-primary" id="printReceiptBtn">พิมพ์ใบเสร็จ</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="cashierPaymentModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">รายละเอียดการชำระเงิน</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="cashierPaymentBody">
+            <!-- JS will fill this -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" id="cashierCompleteBtn">เสร็จสิ้นรายการ</button>
+            <button type="button" class="btn btn-primary" id="cashierPrintBtn">พิมพ์ใบเสร็จ</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/cashier_js.js"></script>
+</body>
+</html>

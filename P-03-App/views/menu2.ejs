@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>เมนูอาหาร | PP Restaurant</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+
+
+    <style>
+        body {
+            background: #f8f8f8;
+            color: #333;
+        }
+
+        .menu-container {
+            max-width: 1400px;
+        }
+
+        .category-sidebar {
+            position: sticky;
+            top: 90px;
+        }
+
+        .category-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .category-link {
+            display: block;
+            padding: 12px 16px;
+            background: white;
+            color: #444;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .category-link:hover {
+            background: #dc3545;
+            color: white;
+
+            transform: translateX(4px);
+        }
+
+        .category-section {
+            scroll-margin-top: 90px;
+        }
+
+        .category-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .category-heading h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .category-heading-line {
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .menu-card {
+            height: 100%;
+            overflow: hidden;
+            background: white;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+            cursor: pointer;
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .menu-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 210px;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+
+        .menu-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-card:hover .menu-image {
+            transform: scale(1.05);
+        }
+
+        .menu-card-body {
+            padding: 16px;
+        }
+
+        .menu-name {
+            margin: 0 0 8px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .menu-price {
+            margin: 0;
+            color: #dc3545;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .menu-modal-image {
+            width: 100%;
+            max-width: 280px;
+            height: 280px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-title {
+            font-weight: 700;
+        }
+
+        .quantity-control {
+            display: flex;
+            width: 150px;
+            height: 45px;
+            margin: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .quantity-control button {
+            width: 45px;
+            border: none;
+            background: #f5f5f5;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .quantity-control button:hover {
+            background: #e9e9e9;
+        }
+
+        .quantity-control input {
+            flex: 1;
+            border: none;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .quantity-control input:focus {
+            box-shadow: none;
+        }
+
+        .confirm-btn {
+            height: 48px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 991px) {
+
+            .category-sidebar {
+                position: static;
+                margin-bottom: 25px;
+            }
+
+            .category-list {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 5px;
+
+                /* ซ่อน Scrollbar สำหรับ Firefox และ IE/Edge */
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            /* ซ่อน Scrollbar สำหรับ Chrome, Safari และ Opera */
+            .category-list::-webkit-scrollbar {
+                display: none;
+            }
+
+            .category-link {
+                flex: 0 0 auto;
+                white-space: nowrap;
+            }
+
+        }
+
+        @media (max-width: 576px) {
+
+            .menu-image-wrapper {
+                height: 180px;
+            }
+
+            .category-heading h2 {
+                font-size: 23px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+    <%- include('header') %>
+
+
+    <!-- Main Menu -->
+    <main class="container menu-container py-4">
+
+        <div class="row g-4">
+
+            <!-- Category -->
+            <aside class="col-lg-3">
+
+                <div class="category-sidebar">
+
+                    <h3 class="category-title">
+                        <i class="bi bi-list-ul me-2"></i>
+                        หมวดหมู่อาหาร
+                    </h3>
+
+
+                    <div class="category-list">
+
+                        <% data.forEach(function(category) { %>
+
+                            <a
+                                href="#section<%= category.category_id %>"
+                                class="category-link">
+
+                                <%= category.category_name %>
+
+                            </a>
+
+                        <% }); %>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Menu Content -->
+            <section class="col-lg-9">
+
+                <% data.forEach(function(category) { %>
+
+                    <section
+                        id="section<%= category.category_id %>"
+                        class="category-section mb-5">
+
+                        <!-- Category heading -->
+                        <div class="category-heading">
+
+                            <h2>
+                                <%= category.category_name %>
+                            </h2>
+
+                            <div class="category-heading-line"></div>
+
+                        </div>
+
+
+                        <!-- Food cards -->
+                        <div class="row g-4">
+
+                            <% data2
+                                .filter(function(item) {
+                                    return item.category_id === category.category_id;
+                                })
+                                .forEach(function(item) { %>
+
+                                <div class="col-6 col-md-6 col-xl-4">
+
+                                    <div
+                                        class="menu-card"
+                                        data-menu-id="<%= item.menu_item_id %>"
+                                        data-name="<%= item.item_name %>"
+                                        data-img="/menu_items/<%= item.menu_item_id %>.jpg"
+                                        data-desc="<%= item.item_description || '' %>"
+                                        data-price="<%= item.price %>">
+
+                                        <%# Food image %>
+                                        <div class="menu-image-wrapper">
+
+                                            <img
+                                                src="/menu_items/<%= item.menu_item_id %>.jpg"
+                                                class="menu-image"
+                                                alt="<%= item.item_name %>"
+                                                loading="lazy">
+                                        </div>
+
+                                        <%# Food information %>
+                                        <div class="menu-card-body">
+
+                                            <h3 class="menu-name">
+                                                <%= item.item_name %>
+                                            </h3>
+
+                                            <p class="menu-price">
+                                                <%= Number(item.price).toLocaleString('th-TH') %> บาท
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </section>
+                <% }); %>
+            </section>
+        </div>
+    </main>
+
+
+
+    // Food Detail Modal 
+
+    <div
+        class="modal fade"
+        id="menuItemModal"
+        tabindex="-1"
+        aria-labelledby="menuItemModalLabel"
+        aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+
+                <%# Modal header %>
+
+                <div class="modal-header">
+
+                    <h5
+                        class="modal-title"
+                        id="menuItemModalLabel">
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="ปิด">
+                    </button>
+
+                </div>
+
+
+                <%# Modal body %>
+
+                <div class="modal-body p-4">
+
+                    <%# Food image %>
+                    <img
+                        id="menuItemModalImg"
+                        src=""
+                        class="menu-modal-image">
+
+                    <%# Description %>
+                    <p
+                        id="menuItemModalDesc"
+                        class="text-muted text-center mb-2">
+                    </p>
+
+                    <%# Price %>
+                    <p
+                        id="menuItemModalPrice"
+                        class="text-danger fw-bold fs-4 text-center">
+                    </p>
+
+                    <%# Quantity %>
+                    <div class="mb-4">
+
+                        <label class="form-label fw-bold d-block">
+                            จำนวน
+                        </label>
+
+                        <div class="quantity-control">
+
+                            <button
+                                type="button"
+                                id="qtyDecrease">
+                                −
+                            </button>
+
+                            <input
+                                type="number"
+                                id="menuItemModalQty"
+                                value="1"
+                                min="1"
+                                readonly>
+
+                            <button
+                                type="button"
+                                id="qtyIncrease">
+                                +
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <%# Confirm %>
+                    <button
+                        type="button"
+                        class="btn btn-danger w-100 confirm-btn"
+                        id="menuItemModalConfirm">
+
+                        <i class="bi bi-cart-plus me-2"></i>
+                        เพิ่มลงตะกร้า
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <%# Cart %>
+    <%- include('cart.ejs') %>
+
+    <%# Footer %>
+    <%- include('footer') %>
+
+    <%# Menu JavaScript %>
+    <script src="/javascripts/menu_js.js"></script>
+
+</body>
+
+</html>

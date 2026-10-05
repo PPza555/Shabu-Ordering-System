@@ -1,0 +1,62 @@
+
+<%# ===== ตัวแปรช่วย: สร้าง query string สำหรับ table_id เพียงครั้งเดียว ===== %>
+<%# ตรวจว่ามีตัวแปร table_id ถูกส่งมาจากหน้าที่เรียก include หรือไม่ (EJS ส่งต่อ locals ให้ include อัตโนมัติ) %>
+<%# หากมี ให้ได้ "?table_id=xx" มิฉะนั้นเป็นสตริงว่าง เพื่อนำไปต่อท้ายทุกลิงก์ %>
+<% const tableQuery = (typeof table_id !== 'undefined' && table_id) ? '?table_id=' + table_id : ''; %>
+
+<%# ===== เริ่ม navbar: ติดด้านบนเสมอ (sticky-top) ขยายเต็มเมื่อจอ lg ขึ้นไป พื้นหลังใช้คลาส bg-custom ===== %>
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-danger p-3">
+    <%# container-fluid: ให้เนื้อหาเต็มความกว้างหน้าจอ %>
+    <div class="container-fluid">
+
+        <%# ===== โลโก้และชื่อร้าน คลิกแล้วกลับหน้าหลัก ===== %>
+        <a class="navbar-brand d-flex align-items-center" href="/<%= tableQuery %>">
+            <%# วงกลมสีแดงแทนโลโก้ (ภายหลังเปลี่ยนเป็น <img src="/images/logo.png"> ได้) %>
+            <span class="rounded-circle d-inline-block flex-shrink-0"
+                style="width:56px;height:56px;background:#ff0000;border:1px solid #000;">
+                <!-- <img src="/images/logo.png"> -->
+            </span>
+            <%# ชื่อร้าน %>
+            <span class="d-flex flex-column ms-3 lh-sm">
+                <span class="fw-bold">PP restaurant</span>
+            </span>
+        </a>
+
+        <%# ===== ปุ่มสามขีด (แสดงเฉพาะจอเล็ก) data-bs-target ต้องตรงกับ id ของ collapse ด้านล่าง ===== %>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <%# ===== ส่วนเมนูที่พับเก็บได้ (id ต้องตรงกับ data-bs-target ของปุ่มด้านบน) ===== %>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+            <%# กลุ่มเมนูฝั่งซ้าย: me-auto ดันกลุ่มถัดไปไปชิดขวา %>
+            <div class="navbar-nav me-auto ms-lg-4">
+            </div>
+            
+            <%# กลุ่มเมนูฝั่งขวา: align-items-lg-center จัดให้อยู่กึ่งกลางแนวตั้งบนจอใหญ่ %>
+            <ul class="navbar-nav align-items-lg-center gap-lg-3">
+                <li class="nav-item">
+                    <a class="nav-link fw-bold fs-5" href="/<%= tableQuery %>">หน้าหลัก</a>
+                </li>
+                <%# ลิงก์หน้าค้นหา %>
+                <li class="nav-item">
+                    <a class="nav-link fw-bold fs-5" href="/find<%= tableQuery %>">ค้นหา</a>
+                </li>
+                <%# ปุ่มตะกร้า: เปิด offcanvas id="cartOffcanvas" ซึ่งต้องมีอยู่ในหน้าที่เรียกใช้ %>
+                <li class="nav-item">
+                    <a class="nav-link fw-bold fs-5" href="#" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">ตะกร้า</a>
+                </li>
+                <%# ลิงก์หน้าประวัติการสั่งอาหาร %>
+                <li class="nav-item">
+                    <a class="nav-link fw-bold fs-5" href="/history<%= tableQuery %>">ประวัติการสั่งอาหาร</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<%# สคริปต์ของ header (เช่น การเริ่มต้น Google Translate) %>
+<script src="/javascripts/header_js.js"></script>
